@@ -1,0 +1,175 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Some Page</title>
+        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+        <style>
+            body {
+            margin: auto;
+            }
+            .tab {
+              overflow: hidden;
+              border: 1px solid #ccc;
+              background-color: #f1f1f1;
+            }
+            .tab button {
+              background-color: inherit;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 14px 16px;
+              transition: 0.3s;
+              width:50%;
+            }
+            .tab button.active {
+                background-color: #ccc;
+                
+              }
+              .tabcontent {
+              display: none;
+              padding: 6px 12px;
+              border: 1px solid #ccc;
+              border-top: none;
+            }
+            .container {
+            
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            height: auto;
+            }
+
+            .select,
+            .favourite {
+            width: 50%;
+            height: 30vh;
+            }
+
+            
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+          <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Artist')" id="defaultOpen">Artists</button>
+            <button class="tablinks" onclick="openTab(event, 'Favourites')">Favourites</button>
+           
+            
+          </div>
+          
+            <div id="Artist" class="select tabcontent ">
+              <h3>choose your favorite artists</h3>
+              <form>
+                  <input type="checkbox" id ="phyno"  value="Phyno">
+                  <label for ="phyno" >Phyno</label>
+                  <br>
+                  <input type="checkbox" id ="chike"  value="Chike">
+                  <label for ="chike" >Chike</label>
+                  <br>
+                  <input type="checkbox" id ="don_jazzy"  value="Don Jazzy">
+                  <label for ="don_jazzy" >Don Jazzy</label>
+                  <br>
+                  <input type="checkbox" id ="flavour"  value="flavour">
+                  <label for ="flavour" >Flavour</label>
+                  <br>
+                  <button type="submit" id="submit">submit</button>
+                  
+              </form>
+          </div>
+
+          <div  id="Favourites" class="favorites tabcontent">
+              <h3>your favourite artists</h3>
+              <div>
+                  <span id="message"></span>
+                 <ul></ul> 
+              </div>
+          </div>
+            
+        </div>
+        
+      
+    
+        <script type="text/javascript">
+
+            // const form = document.querySelector("form");
+    const ul = document.querySelector("ul");
+    const button = document.getElementById("submit");
+    const ClearBtn = document.getElementById("clear");
+    const msgSpan = document.getElementById("message");
+    const phyno = document.getElementById("phyno");
+    const don_jazzy = document.getElementById("don_jazzy");
+    const chike = document.getElementById("chike");
+    const flavour = document.getElementById("flavour");
+    
+    document.getElementById("defaultOpen").click();
+
+    function openTab(evt, tabName) {
+ 
+  var i, tabcontent, tablinks;
+
+  
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+    const submitChoice = (e) => {
+      e.preventDefault();
+    
+      fArt1 = phyno.checked ? phyno.value : null;
+      fArt2 = don_jazzy.checked ? don_jazzy.value : null;
+      fArt3 = chike.checked ? chike.value : null;
+      fArt4 = flavour.checked ? flavour.value : null;
+      let artists = new Array(fArt1, fArt2, fArt3, fArt4);
+      filteredArtists = artists.filter((artist) => {
+        return artist != null;
+      });
+      localStorage.setItem("yourFavs", JSON.stringify(filteredArtists));
+      loadFavs();
+      location.reload();
+    };
+    
+    const loadFavs = () => {
+      if (localStorage.yourFavs) {
+        const favourites = JSON.parse(localStorage.getItem("yourFavs"));
+        console.log(favourites);
+        favourites.map((artist) => {
+          var li = document.createElement("li");
+          li.textContent = artist;
+          ul.appendChild(li);
+        });
+      } else {
+        h5 = document.createElement("h5");
+        msgSpan.appendChild(h5).innerText =
+          "you have no favourites, please choose one in the artist tab";
+      }
+    };
+    
+    const clearStore = () => {
+      localStorage.clear();
+    };
+    
+    window.onload = () => {
+      loadFavs();
+    };
+    
+    button.addEventListener("click", submitChoice);
+    ClearBtn.addEventListener("click", clearStore);
+    
+            </script>
+
+    </body>
+</html>
